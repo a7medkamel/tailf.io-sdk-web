@@ -15,10 +15,13 @@ export default class Tailf {
               ? document.getElementById(root)
               : root
               ;
+
+    let opt = _.defaults({}, options, { style : { height : '400px' }, uri : 'https://tailf.io/' });
+
     ReactDOM.render(
       <Stdio
-        style = {{ height : '400px' }}
-        uri = { options.uri }
+        style = { opt.style }
+        uri = { opt.uri }
       />, elm);
   }
 }
