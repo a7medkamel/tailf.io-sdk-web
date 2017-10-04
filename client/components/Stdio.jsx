@@ -17,9 +17,11 @@ export default class Stdio extends React.Component {
       tailf : undefined
     }
 
-    let uri = this.props.uri || 'https://tailf.io';
+    let uri     = this.props.uri    || 'https://tailf.io'
+      , token   = this.props.token
+      ;
 
-    this.client = new Client(uri);
+    this.client = new Client(uri, { token });
 
     this.client.on('connect', (data) => {
       let { uri : tailf } = data;

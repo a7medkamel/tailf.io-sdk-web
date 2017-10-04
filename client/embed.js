@@ -20,8 +20,9 @@ export default class Tailf {
 
     ReactDOM.render(
       <Stdio
-        style = { opt.style }
-        uri = { opt.uri }
+        style   = { opt.style }
+        uri     = { opt.uri }
+        token   = { opt.token }
       />, elm);
   }
 }
