@@ -38,6 +38,10 @@ export default class Stdio extends React.Component {
         }
       });
 
+      this.client.on('joined', (payload) => {
+        console.log(payload);
+      });
+
       this.client.on('end', (payload) => {
         console.log(payload);
       });
