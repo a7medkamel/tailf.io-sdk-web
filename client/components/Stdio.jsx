@@ -4,7 +4,7 @@ import XTerm from 'react-xterm';
 
 import XTermCSS from 'xterm/dist/xterm.css';
 
-import tailf_sdk from 'taskmill-core-tailf';
+import tailf_sdk from 'tailf.io-sdk';
 
 export default class Stdio extends React.Component {
   constructor(props) {

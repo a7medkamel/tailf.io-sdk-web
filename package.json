@@ -24,7 +24,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "bootstrap": "^4.0.0-alpha.6",
-    "taskmill-core-tailf": "git+https://github.com/a7medkamel/taskmill-core-tailf.git",
+    "tailf.io-sdk": "git+https://github.com/a7medkamel/tailf.io-sdk.git",
     "css-loader": "^0.28.5",
     "file-loader": "^0.11.2",
     "html-webpack-plugin": "^2.30.1",
