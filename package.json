@@ -24,8 +24,8 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "bootstrap": "^4.0.0-alpha.6",
-    "tailf.io-sdk": "git+https://github.com/a7medkamel/tailf.io-sdk.git",
     "css-loader": "^0.28.5",
+    "css-math": "^0.4.0",
     "file-loader": "^0.11.2",
     "html-webpack-plugin": "^2.30.1",
     "path": "^0.12.7",
@@ -35,6 +35,7 @@
     "react-spinners": "0.0.30",
     "react-xterm": "^1.1.1",
     "style-loader": "^0.18.2",
+    "tailf.io-sdk": "git+https://github.com/a7medkamel/tailf.io-sdk.git",
     "universal-url": "^1.0.0",
     "url-loader": "^0.5.9",
     "webpack": "^3.5.5"
