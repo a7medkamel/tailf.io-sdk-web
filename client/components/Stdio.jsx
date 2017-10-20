@@ -14,6 +14,7 @@ export default class Stdio extends React.Component {
 
     this.state = {
         uri   : undefined
+      , id    : undefined
       , token : undefined
     }
   }
@@ -72,19 +73,51 @@ export default class Stdio extends React.Component {
       return null;
     }
 
-    const css = `
+    let css = `
     .terminal.xterm  {
       height : ${this.props.style.height};
       font-size : 11px
     }
+
+    .tf-terminal-footer {
+      font-weight: bold;
+      font-size: 0.65em;
+
+      padding: 5px 10px;
+
+      background-color: #f5f5f5;
+
+      border: 1px solid #ddd;
+      border-bottom-right-radius: 3px;
+      border-bottom-left-radius: 3px;
+
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    }
     `
+    let href        = this.state.uri
+      , render_uri  = !!href
+      , text        = `${this.state.id}`
+      ;
 
     let height = css_parser(`${this.props.style.height} + 20px`);
     //  height : `calc(${this.props.style.height} - 20)`
+
     return (
-      <div style={{ padding : '10px', height, 'backgroundColor' : 'rgb(0, 0, 0)' }}>
+      <div>
         <style>{css}</style>
-        <XTerm options={{ cursorBlink : false, cursorStyle : 'underline' }} ref={(child) => { this.xtermjs = child; }}/>
+        <div style={{ padding : '10px', height, 'backgroundColor' : 'rgb(0, 0, 0)' }}>
+          <XTerm options={{ cursorBlink : false, cursorStyle : 'underline' }} ref={(child) => { this.xtermjs = child; }}/>
+        </div>
+        {render_uri &&
+          <div className="tf-terminal-footer">
+            <a href={href} style={{ color : '#333' }}>
+              <i className="fa fa-fw fa-file-text-o" style={{ marginRight : '0.25em' }}></i>{text}
+            </a>
+            <div className="pull-right">
+              <a href="https://www.tailf.io" style={{ color : '#333' }}>TAILF</a>
+            </div>
+          </div>
+        }
       </div>
     );
   }
