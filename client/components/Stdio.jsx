@@ -11,52 +11,61 @@ import css_parser from 'css-math/lib/parser';
 export default class Stdio extends React.Component {
   constructor(props) {
     super(props);
+  }
 
-    this.state = {
-        uri   : undefined
-      , id    : undefined
-      , token : undefined
+  connect(options = {}) {
+    let { uri, token }  = options
+      , { xtermjs }     = this
+      ;
+
+    if (this.client) {
+      this.client.close();
+      delete this.client;
     }
+
+    if (xtermjs) {
+      xtermjs.xterm.clear();
+    }
+
+    let { Client } = tailf_sdk;
+
+    let client = new Client(uri, { token });
+
+    client
+      .on('data', (payload = {}) => {
+        let { text }    = payload
+          , { xtermjs } = this
+          ;
+
+        if (xtermjs) {
+          xtermjs.write(text);
+        }
+      }).on('end', (payload) => {
+        //
+      });
+
+    this.client = client;
+  }
+
+  componentWillMount() {
+    let { uri, token }  = this.props;
+
+    this.connect({ uri, token });
   }
 
   componentDidMount() {
-    if (this.xtermjs) {
-      this.xtermjs.fit();
+    let { xtermjs } = this;
+
+    if (xtermjs) {
+      xtermjs.fit();
     }
   }
 
   componentWillUpdate(nextProps, nextState) {
-    let { uri, token }  = nextState
-      , { xtermjs }     = this
-      ;
+    let { uri, token }  = nextProps;
 
-    if (this.state.uri != uri || this.state.token != token) {
-      if (this.client) {
-        this.client.close();
-        delete this.client;
-      }
-
-      if (xtermjs) {
-        xtermjs.xterm.clear();
-      }
-
-      let { Client } = tailf_sdk;
-
-      let client = new Client(uri, { token });
-
-      client
-        .on('connect', () => {
-          // connected
-        })
-        .on('data', (payload = {}) => {
-          let { text } = payload;
-          if (xtermjs) {
-            xtermjs.write(text);
-          }
-        }).on('end', (payload) => {
-        });
-
-      this.client = client;
+    if (this.props.uri != uri || this.props.token != token) {
+      this.connect({ uri, token });
     }
   }
 
@@ -94,21 +103,22 @@ export default class Stdio extends React.Component {
       font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
     }
     `
-    let href        = this.state.uri
-      , render_uri  = !!href
-      , text        = `${this.state.id}`
+
+    let href          = this.props.uri
+      , render_footer = this.props.show_footer && !!this.client
+      , text          = this.client? `${this.client.id}` : ''
       ;
 
-    let height = css_parser(`${this.props.style.height} + 20px`);
-    //  height : `calc(${this.props.style.height} - 20)`
+    // let height = css_parser(`${this.props.style.height} + 20px`);
+    let height = render_footer? `calc(${this.props.style.height} - 60px` : this.props.style.height;
 
     return (
-      <div>
+      <div style={{ height }}>
         <style>{css}</style>
-        <div style={{ padding : '10px', height, 'backgroundColor' : 'rgb(0, 0, 0)' }}>
+        <div style={{ padding : '10px', height : `calc(${this.props.style.height} + 20px)`, 'backgroundColor' : 'rgb(0, 0, 0)' }}>
           <XTerm options={{ cursorBlink : false, cursorStyle : 'underline' }} ref={(child) => { this.xtermjs = child; }}/>
         </div>
-        {render_uri &&
+        {render_footer &&
           <div className="tf-terminal-footer">
             <a href={href} style={{ color : '#333' }}>
               <i className="fa fa-fw fa-file-text-o" style={{ marginRight : '0.25em' }}></i>{text}

@@ -16,7 +16,7 @@ export default class Tailf {
               : root
               ;
 
-    let opt = _.defaults({}, options, { style : { height : '400px' }, uri : 'https://tailf.io/' });
+    let opt = _.extend({ style : { height : '400px' }, uri : 'https://tailf.io/' }, options);
 
     ReactDOM.render(
       <Stdio
