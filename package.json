@@ -20,28 +20,28 @@
   "homepage": "https://github.com/a7medkamel/tailf.io-sdk-web#readme",
   "dependencies": {
     "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.1",
+    "babel-loader": "^7.1.2",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "bootstrap": "^4.0.0-alpha.6",
-    "css-loader": "^0.28.5",
+    "css-loader": "^0.28.7",
     "css-math": "^0.4.0",
-    "file-loader": "^0.11.2",
+    "file-loader": "^1.1.5",
     "html-webpack-plugin": "^2.30.1",
     "path": "^0.12.7",
-    "react": "^15.6.1",
-    "react-bootstrap": "^0.31.2",
-    "react-dom": "^15.6.1",
-    "react-spinners": "0.0.30",
+    "react": "^16.0.0",
+    "react-bootstrap": "^0.31.3",
+    "react-dom": "^16.0.0",
+    "react-spinners": "0.1.8",
     "react-xterm": "^1.1.1",
-    "style-loader": "^0.18.2",
+    "style-loader": "^0.19.0",
     "tailf.io-sdk": "git+https://github.com/a7medkamel/tailf.io-sdk.git",
     "universal-url": "^1.0.0",
-    "url-loader": "^0.5.9",
-    "webpack": "^3.5.5"
+    "url-loader": "^0.6.2",
+    "webpack": "^3.8.1"
   },
   "devDependencies": {
-    "webpack-dev-server": "^2.7.1",
+    "webpack-dev-server": "^2.9.3",
     "babel-plugin-transform-class-properties": "^6.24.1"
   }
 }
