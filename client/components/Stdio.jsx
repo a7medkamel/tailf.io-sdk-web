@@ -27,24 +27,26 @@ export default class Stdio extends React.Component {
       xtermjs.xterm.clear();
     }
 
-    let { Client } = tailf_sdk;
+    if (uri && token) {
+      let { Client } = tailf_sdk;
 
-    let client = new Client(uri, { token });
+      let client = new Client(uri, { token });
 
-    client
-      .on('data', (payload = {}) => {
-        let { text }    = payload
+      client
+        .on('data', (payload = {}) => {
+          let { text }    = payload
           , { xtermjs } = this
           ;
 
-        if (xtermjs) {
-          xtermjs.write(text);
-        }
-      }).on('end', (payload) => {
-        //
-      });
+          if (xtermjs) {
+            xtermjs.write(text);
+          }
+        }).on('end', (payload) => {
+          //
+        });
 
-    this.client = client;
+      this.client = client;
+    }
   }
 
   componentWillMount() {
