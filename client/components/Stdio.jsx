@@ -112,7 +112,7 @@ export default class Stdio extends React.Component {
       ;
 
     // let height = css_parser(`${this.props.style.height} + 20px`);
-    let height = render_footer? `calc(${this.props.style.height} - 60px + 20px` : `calc(${this.props.style.height} + 20px`;
+    let height = render_footer? `calc(${this.props.style.height} + 60px + 20px)` : `calc(${this.props.style.height} + 20px)`;
 
     return (
       <div style={{ padding : '10px', height, 'backgroundColor' : 'rgb(0, 0, 0)' }}>
