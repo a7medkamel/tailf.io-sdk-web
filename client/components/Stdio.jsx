@@ -84,9 +84,22 @@ export default class Stdio extends React.Component {
       return null;
     }
 
+    let href          = this.props.uri
+      , render_footer = this.props.show_footer && !!this.client
+      , text          = this.client? `${this.client.id}` : ''
+      ;
+
+    let oh = this.props.style.height
+      , th = `calc(${oh} - 20px)`
+      ;
+
+    if (render_footer) {
+      th = `calc(${oh} - 27px - 20px)`
+    }
+
     let css = `
     .terminal.xterm  {
-      height : ${this.props.style.height};
+      height : ${th};
       font-size : 11px
     }
 
@@ -95,29 +108,24 @@ export default class Stdio extends React.Component {
       font-size: 0.65em;
 
       padding: 5px 10px;
+      margin: 10px -10px 0;
 
       background-color: #f5f5f5;
 
       border: 1px solid #ddd;
+      /*
       border-bottom-right-radius: 3px;
       border-bottom-left-radius: 3px;
+      */
 
       font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
     }
     `
 
-    let href          = this.props.uri
-      , render_footer = this.props.show_footer && !!this.client
-      , text          = this.client? `${this.client.id}` : ''
-      ;
-
-    // let height = css_parser(`${this.props.style.height} + 20px`);
-    let height = render_footer? `calc(${this.props.style.height} + 60px + 20px)` : `calc(${this.props.style.height} + 20px)`;
-
     return (
-      <div style={{ padding : '10px', height, 'backgroundColor' : 'rgb(0, 0, 0)' }}>
+      <div style={{ padding : '10px', height : oh, 'backgroundColor' : 'rgb(0, 0, 0)' }}>
         <style>{css}</style>
-        <div style={{ height : '100%' }}>
+        <div>
           <XTerm options={{ cursorBlink : false, cursorStyle : 'underline' }} ref={(child) => { this.xtermjs = child; }}/>
         </div>
         {render_footer &&
