@@ -11,6 +11,10 @@ import css_parser from 'css-math/lib/parser';
 export default class Stdio extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      end : false
+    }
   }
 
   connect(options = {}) {
@@ -42,7 +46,7 @@ export default class Stdio extends React.Component {
             xtermjs.write(text);
           }
         }).on('end', (payload) => {
-          //
+          this.setState({ end : true });
         });
 
       this.client = client;
@@ -86,20 +90,41 @@ export default class Stdio extends React.Component {
 
     let href          = this.props.uri
       , render_footer = this.props.show_footer && !!this.client
+      , render_end    = this.state.end
       , text          = this.client? `${this.client.id}` : ''
       ;
 
-    let oh = this.props.style.height
-      , th = `calc(${oh} - 20px)`
-      ;
-
-    if (render_footer) {
-      th = `calc(${oh} - 27px - 20px)`
-    }
+    // let oh = this.props.style.height
+    //   , th = `calc(${oh} - 20px)`
+    //   ;
+    //
+    // if (render_footer) {
+    //   th = `calc(${oh} - 27px - 20px)`
+    // }
 
     let css = `
+    .td-terminal-status {
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+      background-color: #ddd;
+      color: #000;
+      z-index: 10;
+      padding: 10px;
+    }
+
+    .tf-terminal-wrap {
+      padding : 5px;
+      width: 100%;
+      background-color: rgb(0, 0, 0);
+      display: flex;
+    }
+
+    .tf-terminal-content, .xterm-rows {
+      width: 100%;
+    }
+
     .terminal.xterm  {
-      height : ${th};
       font-size : 11px
     }
 
@@ -123,9 +148,14 @@ export default class Stdio extends React.Component {
     `
 
     return (
-      <div style={{ padding : '10px', height : oh, 'backgroundColor' : 'rgb(0, 0, 0)' }}>
+      <div className="tf-terminal-wrap">
+        {render_end &&
+          <div className="td-terminal-status">
+            <i className="fa fa-hand-spock-o" aria-hidden="true"></i> End
+          </div>
+        }
         <style>{css}</style>
-        <div>
+        <div className="tf-terminal-content">
           <XTerm options={{ cursorBlink : false, cursorStyle : 'underline' }} ref={(child) => { this.xtermjs = child; }}/>
         </div>
         {render_footer &&
