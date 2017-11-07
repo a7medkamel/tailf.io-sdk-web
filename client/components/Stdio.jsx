@@ -13,7 +13,8 @@ export default class Stdio extends React.Component {
     super(props);
 
     this.state = {
-      end : false
+        end   : false
+      , error : false
     }
   }
 
@@ -46,7 +47,9 @@ export default class Stdio extends React.Component {
             xtermjs.write(text);
           }
         }).on('end', (payload) => {
-          this.setState({ end : true });
+          let { error } = payload;
+
+          this.setState({ end : true, error });
         });
 
       this.client = client;
@@ -91,6 +94,7 @@ export default class Stdio extends React.Component {
     let href          = this.props.uri
       , render_footer = this.props.show_footer && !!this.client
       , render_end    = this.state.end
+      , render_err    = !!this.state.error
       , text          = this.client? `${this.client.id}` : ''
       ;
 
@@ -105,12 +109,28 @@ export default class Stdio extends React.Component {
     let css = `
     .td-terminal-status {
       position: absolute;
-      right: 20px;
-      bottom: 20px;
+      right: 10px;
+      bottom: 10px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-content: flex-end;
+    }
+
+    .td-terminal-status-item {
+      margin: 2px;
       background-color: #ddd;
       color: #000;
-      z-index: 10;
-      padding: 10px;
+      padding: 5px;
+      display: inline-block;
+    }
+
+    .td-terminal-status-end {
+      display: inline-block;
+    }
+
+    .td-terminal-status-error {
+      font-size: 0.8em;
     }
 
     .tf-terminal-wrap {
@@ -149,9 +169,16 @@ export default class Stdio extends React.Component {
 
     return (
       <div className="tf-terminal-wrap">
-        {render_end &&
+        {(render_end || render_err) &&
           <div className="td-terminal-status">
-            <i className="fa fa-hand-spock-o" aria-hidden="true"></i> End
+            {render_end &&
+              <div>
+                <div className="td-terminal-status-end td-terminal-status-item"><i className="fa fa-hand-spock-o" aria-hidden="true"></i> End</div>
+              </div>
+            }
+            {render_err &&
+              <div className="td-terminal-status-error td-terminal-status-item"><i className="fa fa-exclamation-circle" aria-hidden="true"></i> {this.state.error}</div>
+            }
           </div>
         }
         <style>{css}</style>
