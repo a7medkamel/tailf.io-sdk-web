@@ -13,8 +13,9 @@ export default class Stdio extends React.Component {
     super(props);
 
     this.state = {
-        end   : false
-      , error : false
+        end       : false
+      , error     : false
+      , connected : false
     }
   }
 
@@ -51,6 +52,16 @@ export default class Stdio extends React.Component {
 
           this.setState({ end : true, error });
         });
+
+      client
+        .socket
+        .on('readable', () => {
+          this.setState({ connected : true });
+        })
+        .on('disconnect', () => {
+          this.setState({ connected : false });
+        })
+        ;
 
       this.client = client;
     }
@@ -95,6 +106,7 @@ export default class Stdio extends React.Component {
       , render_footer = this.props.show_footer && !!this.client
       , render_end    = this.state.end
       , render_err    = !!this.state.error
+      , render_con    = !this.state.connected
       , text          = this.client? `${this.client.id}` : ''
       ;
 
@@ -109,8 +121,8 @@ export default class Stdio extends React.Component {
     let css = `
     .td-terminal-status {
       position: absolute;
-      right: 10px;
-      bottom: 10px;
+      right: 5px;
+      bottom: 5px;
       z-index: 10;
       display: flex;
       flex-direction: column;
@@ -129,8 +141,12 @@ export default class Stdio extends React.Component {
       display: inline-block;
     }
 
-    .td-terminal-status-error {
-      font-size: 0.8em;
+    .td-terminal-status-err {
+      background-color: rgba(218, 66, 80, 1);
+    }
+
+    .td-terminal-status-con {
+
     }
 
     .tf-terminal-wrap {
@@ -171,13 +187,15 @@ export default class Stdio extends React.Component {
       <div className="tf-terminal-wrap">
         {(render_end || render_err) &&
           <div className="td-terminal-status">
-            {render_end &&
-              <div>
+            <div>
+              <div className="td-terminal-status-item"><a href={href} style={{ color : '#333' }}><i className="fa fa-fw fa-file-text-o" aria-hidden="true"></i></a></div>
+              <div className="td-terminal-status-con td-terminal-status-item" style={{ color : this.state.connected? "#28a745" : "#dc3545" }}><i className="fa fa-circle" aria-hidden="true"></i></div>
+              {render_end &&
                 <div className="td-terminal-status-end td-terminal-status-item"><i className="fa fa-hand-spock-o" aria-hidden="true"></i> End</div>
-              </div>
-            }
+              }
+            </div>
             {render_err &&
-              <div className="td-terminal-status-error td-terminal-status-item"><i className="fa fa-exclamation-circle" aria-hidden="true"></i> {this.state.error}</div>
+              <div className="td-terminal-status-err td-terminal-status-item"><i className="fa fa-exclamation-circle" aria-hidden="true"></i> {this.state.error}</div>
             }
           </div>
         }
