@@ -185,20 +185,18 @@ export default class Stdio extends React.Component {
 
     return (
       <div className="tf-terminal-wrap">
-        {(render_end || render_err) &&
-          <div className="td-terminal-status">
-            <div>
-              <div className="td-terminal-status-item"><a href={href} style={{ color : '#333' }}><i className="fa fa-fw fa-file-text-o" aria-hidden="true"></i></a></div>
-              <div className="td-terminal-status-con td-terminal-status-item" style={{ color : this.state.connected? "#28a745" : "#dc3545" }}><i className="fa fa-circle" aria-hidden="true"></i></div>
-              {render_end &&
-                <div className="td-terminal-status-end td-terminal-status-item"><i className="fa fa-hand-spock-o" aria-hidden="true"></i> End</div>
-              }
-            </div>
-            {render_err &&
-              <div className="td-terminal-status-err td-terminal-status-item"><i className="fa fa-exclamation-circle" aria-hidden="true"></i> {this.state.error}</div>
+        <div className="td-terminal-status">
+          <div>
+            <div className="td-terminal-status-item"><a href={href} style={{ color : '#333' }}><i className="fa fa-fw fa-file-text-o" aria-hidden="true"></i></a></div>
+            <div className="td-terminal-status-con td-terminal-status-item" style={{ color : this.state.connected? "#28a745" : "#dc3545" }}><i className="fa fa-circle" aria-hidden="true"></i></div>
+            {render_end &&
+              <div className="td-terminal-status-end td-terminal-status-item"><i className="fa fa-hand-spock-o" aria-hidden="true"></i> End</div>
             }
           </div>
-        }
+          {render_err &&
+            <div className="td-terminal-status-err td-terminal-status-item"><i className="fa fa-exclamation-circle" aria-hidden="true"></i> {this.state.error}</div>
+          }
+        </div>
         <style>{css}</style>
         <div className="tf-terminal-content">
           <XTerm options={{ cursorBlink : false, cursorStyle : 'underline' }} ref={(child) => { this.xtermjs = child; }}/>
