@@ -8,6 +8,8 @@ import tailf_sdk from 'tailf.io-sdk';
 
 import css_parser from 'css-math/lib/parser';
 
+import _ from 'lodash';
+
 export default class Stdio extends React.Component {
   constructor(props) {
     super(props);
@@ -103,14 +105,13 @@ export default class Stdio extends React.Component {
     }
 
     let href          = this.props.uri
-      , render_footer = this.props.show_footer && !!this.client
       , render_end    = this.state.end
       , render_err    = !!this.state.error
       , render_con    = !this.state.connected
       , text          = this.client? `${this.client.id}` : ''
       ;
 
-    // let oh = this.props.style.height
+    let height = _.get(this.props.style, 'height', 'initial');
     //   , th = `calc(${oh} - 20px)`
     //   ;
     //
@@ -154,6 +155,8 @@ export default class Stdio extends React.Component {
       width: 100%;
       background-color: rgb(0, 0, 0);
       display: flex;
+      position: relative;
+      height: ${height}
     }
 
     .tf-terminal-content, .xterm-rows {
@@ -201,16 +204,6 @@ export default class Stdio extends React.Component {
         <div className="tf-terminal-content">
           <XTerm options={{ cursorBlink : false, cursorStyle : 'underline' }} ref={(child) => { this.xtermjs = child; }}/>
         </div>
-        {render_footer &&
-          <div className="tf-terminal-footer">
-            <a href={href} style={{ color : '#333' }}>
-              <i className="fa fa-fw fa-file-text-o" style={{ marginRight : '0.25em' }}></i>{text}
-            </a>
-            <div className="pull-right">
-              <a href="https://www.tailf.io" style={{ color : '#333' }}>TAILF</a>
-            </div>
-          </div>
-        }
       </div>
     );
   }
