@@ -99,6 +99,10 @@ export default class Stdio extends React.Component {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return false;
+  }
+
   render() {
     if (this.props.state == 'none') {
       return null;
