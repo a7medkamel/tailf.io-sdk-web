@@ -99,15 +99,7 @@ export default class Stdio extends React.Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return false;
-  }
-
   render() {
-    if (this.props.state == 'none') {
-      return null;
-    }
-
     let href          = this.props.uri
       , render_end    = this.state.end
       , render_err    = !!this.state.error
@@ -116,12 +108,6 @@ export default class Stdio extends React.Component {
       ;
 
     let height = _.get(this.props.style, 'height', 'initial');
-    //   , th = `calc(${oh} - 20px)`
-    //   ;
-    //
-    // if (render_footer) {
-    //   th = `calc(${oh} - 27px - 20px)`
-    // }
 
     let css = `
     .td-terminal-status {
@@ -165,6 +151,10 @@ export default class Stdio extends React.Component {
 
     .tf-terminal-content, .xterm-rows {
       width: 100%;
+    }
+
+    .tf-terminal-content .ReactXTerm {
+      height: 100%;
     }
 
     .terminal.xterm  {
