@@ -8,6 +8,8 @@ import tailf_sdk from 'tailf.io-sdk';
 
 import css_parser from 'css-math/lib/parser';
 
+import Fullscreen from "react-full-screen";
+
 import _ from 'lodash';
 
 export default class Stdio extends React.Component {
@@ -15,9 +17,10 @@ export default class Stdio extends React.Component {
     super(props);
 
     this.state = {
-        end       : false
-      , error     : false
-      , connected : false
+        end           : false
+      , error         : false
+      , connected     : false
+      , is_fullscreen : false
     }
   }
 
@@ -97,6 +100,10 @@ export default class Stdio extends React.Component {
     if (xtermjs) {
       xtermjs.fit();
     }
+  }
+
+  goFull = () => {
+    this.setState({ is_fullscreen : true });
   }
 
   render() {
@@ -181,24 +188,30 @@ export default class Stdio extends React.Component {
     `
 
     return (
-      <div className="tf-terminal-wrap">
-        <div className="td-terminal-status">
-          <div>
-            <div className="td-terminal-status-item"><a href={href} style={{ color : '#333' }}><i className="fa fa-fw fa-file-text-o" aria-hidden="true"></i></a></div>
-            <div className="td-terminal-status-con td-terminal-status-item" style={{ color : this.state.connected? "#28a745" : "#dc3545" }}><i className="fa fa-circle" aria-hidden="true"></i></div>
-            {render_end &&
-              <div className="td-terminal-status-end td-terminal-status-item"><i className="fa fa-hand-spock-o" aria-hidden="true"></i> End</div>
+      <Fullscreen
+        enabled={this.state.is_fullscreen}
+        onChange={is_fullscreen => this.setState({is_fullscreen})}
+      >
+        <div className="tf-terminal-wrap">
+          <div className="td-terminal-status">
+            <div>
+              <div className="td-terminal-status-item"><a href={href} style={{ color : '#333' }} onClick={this.goFull}><i className="fa fa-fw fa-arrows-alt" aria-hidden="true"></i></a></div>
+              <div className="td-terminal-status-item"><a href={href} style={{ color : '#333' }}><i className="fa fa-fw fa-file-text-o" aria-hidden="true"></i></a></div>
+              <div className="td-terminal-status-con td-terminal-status-item" style={{ color : this.state.connected? "#28a745" : "#dc3545" }}><i className="fa fa-circle" aria-hidden="true"></i></div>
+              {render_end &&
+                <div className="td-terminal-status-end td-terminal-status-item"><i className="fa fa-hand-spock-o" aria-hidden="true"></i> End</div>
+              }
+            </div>
+            {render_err &&
+              <div className="td-terminal-status-err td-terminal-status-item"><i className="fa fa-exclamation-circle" aria-hidden="true"></i> {this.state.error}</div>
             }
           </div>
-          {render_err &&
-            <div className="td-terminal-status-err td-terminal-status-item"><i className="fa fa-exclamation-circle" aria-hidden="true"></i> {this.state.error}</div>
-          }
+          <style>{css}</style>
+          <div className="tf-terminal-content">
+            <XTerm options={{ cursorBlink : false, cursorStyle : 'underline' }} ref={(child) => { this.xtermjs = child; }}/>
+          </div>
         </div>
-        <style>{css}</style>
-        <div className="tf-terminal-content">
-          <XTerm options={{ cursorBlink : false, cursorStyle : 'underline' }} ref={(child) => { this.xtermjs = child; }}/>
-        </div>
-      </div>
+      </Fullscreen>
     );
   }
 }
