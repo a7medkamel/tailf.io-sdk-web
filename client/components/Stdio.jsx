@@ -12,6 +12,8 @@ import fscreen from "fscreen";
 
 import _ from 'lodash';
 
+import 'jquery';
+
 export default class Stdio extends React.Component {
   constructor(props) {
     super(props);
@@ -93,6 +95,11 @@ export default class Stdio extends React.Component {
       // the full screen transition takes time, fit again when it is expected to be done
       setTimeout(() => this.fit(), 2000);
     });
+
+    let tips = $(this.node).find('[data-toggle="tooltip"]');
+    if (tips.tooltip) {
+      tips.tooltip();
+    }
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -108,6 +115,11 @@ export default class Stdio extends React.Component {
 
     if (xtermjs) {
       xtermjs.fit();
+    }
+
+    let tips = $(this.node).find('[data-toggle="tooltip"]');
+    if (tips.tooltip) {
+      tips.tooltip();
     }
   }
 
@@ -230,7 +242,7 @@ export default class Stdio extends React.Component {
               <div className="td-terminal-status-end td-terminal-status-item"><i className="fa fa-hand-spock-o" aria-hidden="true"></i> End</div>
             }
             {render_err &&
-              <div className="td-terminal-status-err td-terminal-status-item"><i className="fa fa-exclamation-circle" aria-hidden="true"></i> {this.state.error}</div>
+              <div className="td-terminal-status-err td-terminal-status-item"><i className="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" title={this.state.error}></i></div>
             }
           </div>
         </div>
