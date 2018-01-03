@@ -43,15 +43,23 @@ export default class Stdio extends React.Component {
     if (uri && token) {
       let { Client } = tailf_sdk;
 
-      let client = new Client(uri, { token });
+      let client    = new Client(uri, { token })
+        , is_blank  = true
+        , lst_type  = undefined
+        ;
 
       client
         .on('data', (payload = {}) => {
-          let { text }    = payload
-          , { xtermjs } = this
-          ;
+          let { text, type }  = payload
+            , { xtermjs }     = this
+            ;
 
           if (xtermjs) {
+            if (!is_blank && lst_type != type) {
+              lst_type = type;
+              xtermjs.write('\n');
+            }
+
             xtermjs.write(text);
           }
         }).on('end', (payload) => {
