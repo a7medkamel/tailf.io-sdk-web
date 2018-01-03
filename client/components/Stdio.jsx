@@ -8,7 +8,7 @@ import tailf_sdk from 'tailf.io-sdk';
 
 import css_parser from 'css-math/lib/parser';
 
-import Fullscreen from "react-full-screen";
+import fscreen from "fscreen";
 
 import _ from 'lodash';
 
@@ -21,7 +21,7 @@ export default class Stdio extends React.Component {
       , error         : false
       , connected     : false
       , is_fullscreen : false
-    }
+    };
   }
 
   connect(options = {}) {
@@ -79,11 +79,20 @@ export default class Stdio extends React.Component {
   }
 
   componentDidMount() {
-    let { xtermjs } = this;
+    this.fit();
 
-    if (xtermjs) {
-      xtermjs.fit();
-    }
+    fscreen.addEventListener('fullscreenchange', (e) => {
+      let is_fullscreen = !!fscreen.fullscreenElement;
+
+      if (this.state.is_fullscreen != is_fullscreen) {
+        this.setState({ is_fullscreen })
+      }
+
+      this.fit();
+
+      // the full screen transition takes time, fit again when it is expected to be done
+      setTimeout(() => this.fit(), 2000);
+    });
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -102,8 +111,23 @@ export default class Stdio extends React.Component {
     }
   }
 
-  goFull = () => {
-    this.setState({ is_fullscreen : true });
+  fit() {
+    let { xtermjs } = this;
+
+    if (xtermjs) {
+      xtermjs.fit();
+    }
+  }
+
+  goFull = (fullscreen) => {
+    // this.setState({ is_fullscreen : !this.is_fullscreen });
+    if (fscreen.fullscreenEnabled) {
+      if (fullscreen) {
+        fscreen.requestFullscreen(this.node);
+      } else {
+        fscreen.exitFullscreen();
+      }
+    }
   }
 
   render() {
@@ -115,6 +139,14 @@ export default class Stdio extends React.Component {
       ;
 
     let height = _.get(this.props.style, 'height', 'initial');
+
+    if (this.state.is_fullscreen) {
+      height = '100%';
+    }
+
+    let expand_icon = this.state.is_fullscreen? 'fa-compress' : 'fa-expand'
+      , toggle_to   = !this.state.is_fullscreen
+      ;
 
     let css = `
     .td-terminal-status {
@@ -188,29 +220,24 @@ export default class Stdio extends React.Component {
     `
 
     return (
-      <div className="tf-terminal-wrap">
-        <Fullscreen
-          enabled={this.state.is_fullscreen}
-          onChange={is_fullscreen => this.setState({is_fullscreen})}
-        >
-          <div className="td-terminal-status">
-            <div>
-              <div className="td-terminal-status-item"><a href={href} style={{ color : '#333' }} onClick={this.goFull}><i className="fa fa-fw fa-arrows-alt" aria-hidden="true"></i></a></div>
-              <div className="td-terminal-status-item"><a href={href} style={{ color : '#333' }}><i className="fa fa-fw fa-file-text-o" aria-hidden="true"></i></a></div>
-              <div className="td-terminal-status-con td-terminal-status-item" style={{ color : this.state.connected? "#28a745" : "#dc3545" }}><i className="fa fa-circle" aria-hidden="true"></i></div>
-              {render_end &&
-                <div className="td-terminal-status-end td-terminal-status-item"><i className="fa fa-hand-spock-o" aria-hidden="true"></i> End</div>
-              }
-            </div>
+      <div className="tf-terminal-wrap" ref={(child) => { this.node = child; }}>
+        <div className="td-terminal-status">
+          <div>
+            <div className="td-terminal-status-item"><a href='#' style={{ color : '#333' }} onClick={() => this.goFull(toggle_to)}><i className={"fa fa-fw " + expand_icon} aria-hidden="true"></i></a></div>
+            <div className="td-terminal-status-item"><a href={href} style={{ color : '#333' }}><i className="fa fa-fw fa-file-text-o" aria-hidden="true"></i></a></div>
+            <div className="td-terminal-status-con td-terminal-status-item" style={{ color : this.state.connected? "#28a745" : "#dc3545" }}><i className="fa fa-circle" aria-hidden="true"></i></div>
+            {render_end &&
+              <div className="td-terminal-status-end td-terminal-status-item"><i className="fa fa-hand-spock-o" aria-hidden="true"></i> End</div>
+            }
             {render_err &&
               <div className="td-terminal-status-err td-terminal-status-item"><i className="fa fa-exclamation-circle" aria-hidden="true"></i> {this.state.error}</div>
             }
           </div>
-          <style>{css}</style>
-          <div className="tf-terminal-content">
-            <XTerm options={{ cursorBlink : false, cursorStyle : 'underline' }} ref={(child) => { this.xtermjs = child; }}/>
-          </div>
-        </Fullscreen>
+        </div>
+        <style>{css}</style>
+        <div className="tf-terminal-content">
+          <XTerm options={{ cursorBlink : false, cursorStyle : 'underline' }} ref={(child) => { this.xtermjs = child; }}/>
+        </div>
       </div>
     );
   }
