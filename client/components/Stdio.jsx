@@ -188,11 +188,11 @@ export default class Stdio extends React.Component {
     `
 
     return (
-      <Fullscreen
-        enabled={this.state.is_fullscreen}
-        onChange={is_fullscreen => this.setState({is_fullscreen})}
-      >
-        <div className="tf-terminal-wrap">
+      <div className="tf-terminal-wrap">
+        <Fullscreen
+          enabled={this.state.is_fullscreen}
+          onChange={is_fullscreen => this.setState({is_fullscreen})}
+        >
           <div className="td-terminal-status">
             <div>
               <div className="td-terminal-status-item"><a href={href} style={{ color : '#333' }} onClick={this.goFull}><i className="fa fa-fw fa-arrows-alt" aria-hidden="true"></i></a></div>
@@ -210,8 +210,8 @@ export default class Stdio extends React.Component {
           <div className="tf-terminal-content">
             <XTerm options={{ cursorBlink : false, cursorStyle : 'underline' }} ref={(child) => { this.xtermjs = child; }}/>
           </div>
-        </div>
-      </Fullscreen>
+        </Fullscreen>
+      </div>
     );
   }
 }
