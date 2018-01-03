@@ -61,6 +61,7 @@ export default class Stdio extends React.Component {
             }
 
             xtermjs.write(text);
+            is_blank = false;
           }
         }).on('end', (payload) => {
           let { error } = payload;
