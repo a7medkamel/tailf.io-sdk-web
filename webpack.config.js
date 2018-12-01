@@ -35,7 +35,6 @@ let conf = {
       { test: /\.jsx$/, exclude: /node_modules/, use: { loader: "babel-loader" } },
       {
           test: /\.css$/
-        , exclude: /node_modules/
         , use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader'] })
       },
       { test: /\.png$/, exclude: /node_modules/, use: { loader: "url-loader?limit=100000" } },
