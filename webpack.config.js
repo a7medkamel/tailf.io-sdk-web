@@ -110,13 +110,13 @@ module.exports = [
       library: 'Tailf'
     }
   }),
-  Object.assign({}, conf, {
-    entry: './client/sdk.js',
-    output: {
-      path: path.resolve('dist'),
-      filename: 'module.js',
-      libraryTarget: 'commonjs',
-      library: 'Tailf'
-    }
-  })
+  // Object.assign({}, conf, {
+  //   entry: './client/sdk.js',
+  //   output: {
+  //     path: path.resolve('dist'),
+  //     filename: 'module.js',
+  //     libraryTarget: 'commonjs',
+  //     library: 'Tailf'
+  //   }
+  // })
 ]

@@ -4,4 +4,4 @@
 */
 import Tailf from './sdk.js';
 
-new Tailf().render('ide', { uri : 'http://localhost:8654/' });
+new Tailf().render('terminal', { uri : 'https://tailf.io/' });

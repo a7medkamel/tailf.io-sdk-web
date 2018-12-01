@@ -1,7 +1,3 @@
-/*
-    ./client/index.js
-    which is the webpack entry file
-*/
 import React from 'react';
 import _ from 'lodash';
 import ReactDOM from 'react-dom';

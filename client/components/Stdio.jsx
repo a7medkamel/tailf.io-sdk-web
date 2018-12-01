@@ -1,5 +1,10 @@
 import React from 'react';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import { faFileAlt, faHandSpock } from '@fortawesome/free-regular-svg-icons'
+import { faCircle, faCompress, faExpandArrowsAlt, faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
+
 import { Terminal } from 'xterm';
 
 import * as fit from 'xterm/lib/addons/fit/fit';
@@ -171,7 +176,7 @@ export default class Stdio extends React.Component {
       height = '100%';
     }
 
-    let expand_icon = this.state.is_fullscreen? 'fa-compress' : 'fa-expand'
+    let expand_icon = this.state.is_fullscreen? faCompress : faExpandArrowsAlt
       , toggle_to   = !this.state.is_fullscreen
       ;
 
@@ -250,14 +255,14 @@ export default class Stdio extends React.Component {
       <div className="tf-terminal-wrap" ref={(child) => { this.node = child; }}>
         <div className="td-terminal-status">
           <div>
-            <div className="td-terminal-status-item"><a href='#' style={{ color : '#333' }} onClick={() => this.goFull(toggle_to)}><i className={"fa fa-fw " + expand_icon} aria-hidden="true"></i></a></div>
-            <div className="td-terminal-status-item"><a href={href} style={{ color : '#333' }}><i className="fa fa-fw fa-file-text-o" aria-hidden="true"></i></a></div>
-            <div className="td-terminal-status-con td-terminal-status-item" style={{ color : this.state.connected? "#28a745" : "#dc3545" }}><i className="fa fa-circle" aria-hidden="true"></i></div>
+            <div className="td-terminal-status-item"><a href='#' style={{ color : '#333' }} onClick={() => this.goFull(toggle_to)}><FontAwesomeIcon icon={expand_icon} /></a></div>
+            <div className="td-terminal-status-item"><a href={href} style={{ color : '#333' }}><FontAwesomeIcon icon={faFileAlt} /></a></div>
+            <div className="td-terminal-status-con td-terminal-status-item" style={{ color : this.state.connected? "#28a745" : "#dc3545" }}><FontAwesomeIcon icon={faCircle} /></div>
             {render_end &&
-              <div className="td-terminal-status-end td-terminal-status-item"><i className="fa fa-hand-spock-o" aria-hidden="true"></i> End</div>
+              <div className="td-terminal-status-end td-terminal-status-item"><FontAwesomeIcon icon={faHandSpock} /> End</div>
             }
             {render_err &&
-              <div className="td-terminal-status-err td-terminal-status-item"><i className="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" title={this.state.error}></i></div>
+              <div className="td-terminal-status-err td-terminal-status-item"><FontAwesomeIcon icon={faExclamationCircle} data-toggle="tooltip" title={this.state.error} /></div>
             }
           </div>
         </div>
