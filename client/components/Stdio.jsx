@@ -132,7 +132,7 @@ export default class Stdio extends React.Component {
     }
   }
 
-  fit() {
+  fill = () => {
     let { xtermjs } = this;
 
     if (xtermjs) {
