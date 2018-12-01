@@ -4,6 +4,7 @@
 const path = require('path');
 
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: './client/index.html',
@@ -15,24 +16,51 @@ const StringReplacePlugin = require('string-replace-webpack-plugin');
 
 let conf = {
   module: {
-    loaders: [
-      { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
-      { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ },
-      { test: /\.css$/, loader: "style-loader!css-loader" },
-      { test: /\.png$/, loader: "url-loader?limit=100000" },
-      { test: /\.jpg$/, loader: "file-loader" },
-      { test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=80000&mimetype=application/font-woff' },
-      { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=80000&mimetype=application/octet-stream' },
-      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader' },
-      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=80000&mimetype=image/svg+xml' },
-      { test: /\.js$/, loader: StringReplacePlugin.replace({
-          replacements: [
-            {
-              pattern: /!new.target/ig,
-              replacement: (match, p1, offset, string) => 'new.target === undefined'
-            }
-          ]})
+    rules: [
+      {
+          test: /\.js$/
+        // , exclude: [/node_modules/, /dist/]
+        , exclude: [/dist/]
+        , use: [
+            { loader: "babel-loader" },
+            { loader: StringReplacePlugin.replace({
+                      replacements: [
+                        {
+                          pattern: /!new.target/ig,
+                          replacement: (match, p1, offset, string) => 'new.target === undefined'
+                        }
+                      ]})
+                    }
+          ]
       },
+      { test: /\.jsx$/, exclude: /node_modules/, use: { loader: "babel-loader" } },
+      {
+          test: /\.css$/
+        , exclude: /node_modules/
+        , use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader'] })
+      },
+      { test: /\.png$/, exclude: /node_modules/, use: { loader: "url-loader?limit=100000" } },
+      { test: /\.jpg$/, exclude: /node_modules/, use: { loader: "file-loader" } },
+      {
+          test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/
+        , exclude: /node_modules/
+        , use: { loader: 'url-loader?limit=80000&mimetype=application/font-woff' }
+      },
+      {
+          test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/
+        , exclude: /node_modules/
+        , use: { loader: 'url-loader?limit=80000&mimetype=application/octet-stream' }
+      },
+      {
+          test: /\.eot(\?v=\d+\.\d+\.\d+)?$/
+        , exclude: /node_modules/
+        , use: { loader: 'file-loader' }
+      },
+      {
+          test: /\.svg(\?v=\d+\.\d+\.\d+)?$/
+        , exclude: /node_modules/
+        , use: { loader: 'url-loader?limit=80000&mimetype=image/svg+xml' }
+      }
     ]
   },
   plugins: [
@@ -49,7 +77,13 @@ let conf = {
     new StringReplacePlugin()
   ],
   node: {
-   fs: 'empty'
+   fs: 'empty',
+   net: 'empty',
+   tls: 'empty',
+   chai: 'empty',
+   express: 'empty',
+   'express-ws': 'empty',
+   'node-pty': 'empty'
   },
   resolve: {
     alias: {
