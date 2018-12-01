@@ -11,7 +11,7 @@ import * as fit from 'xterm/lib/addons/fit/fit';
 
 import XTerm from 'react-xterm';
 
-import XTermCSS from 'xterm/dist/xterm.css';
+import 'xterm/dist/xterm.css';
 
 import tailf_sdk from 'tailf.io-sdk';
 
