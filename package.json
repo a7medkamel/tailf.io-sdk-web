@@ -31,7 +31,7 @@
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.6.3",
     "react-spinners": "^0.4.7",
-    "react-xterm": "git+https://github.com/farfromrefug/react-xterm.git",
+    "react-xterm": "^2.0.4",
     "tailf.io-sdk": "git+https://github.com/a7medkamel/tailf.io-sdk.git"
   },
   "devDependencies": {
