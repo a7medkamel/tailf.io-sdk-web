@@ -19,8 +19,7 @@ let conf = {
     rules: [
       {
           test: /\.js$/
-        // , exclude: [/node_modules/, /dist/]
-        , exclude: [/dist/]
+        , exclude: [/node_modules/, /dist/]
         , use: [
             { loader: "babel-loader" },
             { loader: StringReplacePlugin.replace({

@@ -1,6 +1,0 @@
-{
-  "presets": ["@babel/preset-react"],
-  "plugins": ["transform-class-properties", "css-modules-transform"]
-}
-
-/*  https://github.com/webpack/webpack/issues/1754 */

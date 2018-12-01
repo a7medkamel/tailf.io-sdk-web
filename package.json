@@ -34,11 +34,11 @@
   "devDependencies": {
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.6",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/preset-env": "^7.1.6",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.4",
     "babel-plugin-css-modules-transform": "^1.6.2",
-    "babel-plugin-transform-class-properties": "^6.24.1",
     "chai": "^4.2.0",
     "css-loader": "^1.0.1",
     "css-math": "^0.4.0",
