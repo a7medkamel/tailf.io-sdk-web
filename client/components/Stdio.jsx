@@ -1,5 +1,9 @@
 import React from 'react';
 
+import { Terminal } from 'xterm';
+
+import * as fit from 'xterm/lib/addons/fit/fit';
+
 import XTerm from 'react-xterm';
 
 import XTermCSS from 'xterm/dist/xterm.css';
@@ -84,6 +88,8 @@ export default class Stdio extends React.Component {
   }
 
   componentWillMount() {
+    Terminal.applyAddon(fit);
+
     let { uri, token }  = this.props;
 
     this.connect({ uri, token });
@@ -123,7 +129,7 @@ export default class Stdio extends React.Component {
     let { xtermjs } = this;
 
     if (xtermjs) {
-      xtermjs.fit();
+      xtermjs.xterm.fit();
     }
 
     let tips = $(this.node).find('[data-toggle="tooltip"]');
@@ -132,11 +138,11 @@ export default class Stdio extends React.Component {
     }
   }
 
-  fill = () => {
+  fit = () => {
     let { xtermjs } = this;
 
     if (xtermjs) {
-      xtermjs.fit();
+      xtermjs.xterm.fit();
     }
   }
 
